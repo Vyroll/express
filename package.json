@@ -3,7 +3,8 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "node ./bin/www"
+    "_comment": "node ./bin/www",
+    "start": "nodemon ./bin/www -e hbs"
   },
   "dependencies": {
     "cookie-parser": "~1.4.3",

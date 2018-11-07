@@ -1,8 +1,71 @@
-body {
+/* body {
   padding: 50px;
   font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
 }
 
 a {
   color: #00B7FF;
+} */
+
+body {
+  font: 24px sans-serif, arial;
+  background-color: rgb(128, 128, 128);
+  margin: 0;
 }
+
+p {
+  font: 16px "Times New Roman", arial;
+}
+
+/* layout */
+.wrapped {
+  max-width: 1012px;
+  margin: 0 auto;
+}
+
+/* header */
+header {
+  background-color: blueviolet;
+  padding: 120px 0 0;
+}
+
+  /* navigation */
+  .nav{
+    position: fixed;
+    top: 0;
+    background-color: rgb(182, 11, 96);
+    width: 100%;
+  }
+
+  nav{
+    background-color: brown;
+  }
+
+
+  nav ul{
+    list-style-type: none;
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    padding: 0;
+    margin: 0;
+  }
+
+  nav li {
+    flex: 1;
+  }
+
+  nav ul li a{
+    display: block;
+    text-align: center;
+    /* padding: 0 20px; */
+    /* height: 44px;  */
+    padding: 6px;
+    font-size: 24px;
+    text-decoration: none;
+    color: blue
+  }
+
+  nav ul li a:hover{
+    background-color: aqua
+  }
