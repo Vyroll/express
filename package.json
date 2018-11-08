@@ -4,7 +4,8 @@
   "private": true,
   "scripts": {
     "_comment": "node ./bin/www",
-    "start": "nodemon ./bin/www -e hbs"
+    "start": "nodemon ./bin/www -e hbs",
+    "asdc": "browser-sync start --proxy \"localhost:8080\" --files \"views\" \"public\" --no-notify"
   },
   "dependencies": {
     "cookie-parser": "~1.4.3",
