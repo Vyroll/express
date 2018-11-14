@@ -5,7 +5,9 @@
   "scripts": {
     "_comment": "node ./bin/www",
     "start": "nodemon ./bin/www -e hbs",
-    "asdc": "browser-sync start --proxy \"localhost:8080\" --files \"views\" \"public\" --no-notify"
+    "browsers": "browser-sync start --proxy \"localhost:8080\" --files \"views\" \"public\" --no-notify",
+    "mongod": "mongod",
+    "mongo": "mongo.exe"
   },
   "dependencies": {
     "cookie-parser": "~1.4.3",
@@ -13,6 +15,8 @@
     "express": "~4.16.0",
     "hbs": "~4.0.1",
     "http-errors": "~1.6.2",
+    "mongodb": "^3.1.9",
+    "mongoose": "^5.3.11",
     "morgan": "~1.9.0"
   }
 }

@@ -26,7 +26,6 @@ header span {
   display: inline-block;
   align-content: center;
   vertical-align: middle;
-  /* text-align: center; */
 }
 
   /* navigation */
@@ -67,7 +66,6 @@ header span {
     list-style-type: none;
     display: flex;
     justify-content: center;
-    /* flex-wrap: wrap; */
     padding: 0;
     margin: 0;
   }
@@ -101,13 +99,9 @@ header span {
     cursor: pointer;
   }
 
-
-
 @media only screen and (max-width: 800px) {
     .navig {
         flex-direction: column;
-        /* background-color: lightblue; */
-        /* justify-content: flex-start; */
     }
 
     .navig__con{
@@ -126,5 +120,4 @@ header span {
       display: block;
       background-color: goldenrod;
     }
-
 }
