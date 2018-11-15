@@ -2,9 +2,13 @@
   "name": "cont",
   "version": "0.0.0",
   "private": true,
+  "nodemonConfig": {
+    "wtach": [],
+    "ext": "hbs js css"
+  },
   "scripts": {
     "_comment": "node ./bin/www",
-    "start": "nodemon ./bin/www -e hbs",
+    "start": "nodemon ./bin/www",
     "browsers": "browser-sync start --proxy \"localhost:8080\" --files \"views\" \"public\" --no-notify",
     "mongod": "mongod",
     "mongo": "mongo.exe"

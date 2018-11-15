@@ -1,52 +1,55 @@
 const  createError = require('http-errors');
-const  express = require('express');
+const  express = require('express'); 
 const  path = require('path');
 const  cookieParser = require('cookie-parser');
 const  logger = require('morgan');
 const  hbs = require('hbs');
-
 const  mongoose = require('mongoose');
 
-mongoose.connect('mongodb://localhost/db_cont', { useNewUrlParser: true });
+const app = express();
+
+//database connection
+  mongoose.connect('mongodb://localhost/db_cont', { useNewUrlParser: true });
+  let db = mongoose.connection;
+
+  //database check connection
+  db.once('open', ()=>{
+    console.log('[kg] Connected to DB');
+  });
+  ()=>console.log('awd');
+  
+  db.on('error', (err)=>{
+    console.log('[kg] ' + err);
+  })
+
+  // import models
+  let Article = require('./models/article')
 
 
-// var db = mongoose.connection;
 
-// db.on('error', console.error.bind(console, 'connection error:'));
-
-// db.once('open', function() {
-//   console.log("JEJ");
-//   // we're connected!
-// });
+//routing
+const indexRouter = require('./routes/index');
+const articlesRouter = require('./routes/articles');
 
 
-console.log("test")
-
-var indexRouter = require('./routes/index');
-// var usersRouter = require('./routes/users');
-var newsRouter = require('./routes/news');
-var adminRouter = require('./routes/news');
-
-var app = express();
 
 // view engine setup
 // app.set('view options', { layout: 'other' });
-hbs.registerPartials(__dirname + '/views/partials');
-
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'hbs');
 
+hbs.registerPartials(__dirname + '/views/partials');
+
+//other
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.use('/', indexRouter);
-app.use('/news', newsRouter);
-app.use('/admin', adminRouter);
 
-// app.use('/users', usersRouter);
+app.use('/', indexRouter);
+app.use('/articles', articlesRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

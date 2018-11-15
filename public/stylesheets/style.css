@@ -4,6 +4,11 @@ body {
   margin: 0;
 }
 
+.content {
+  background-color: aqua;
+  padding: 10px 20px;
+}
+
 p {
   font: 16px "Times New Roman", arial;
 }
@@ -74,6 +79,7 @@ header span {
     flex: 1;
   }
 
+
   nav ul li span a{
     display: block;
     text-align: center;
@@ -98,8 +104,29 @@ header span {
     background-color: goldenrod;
     cursor: pointer;
   }
+  
+  .dropdown {
+    display: none;
+    font-size: 14px;
+    background-color: darkslategray;
+  }
 
-@media only screen and (max-width: 800px) {
+  .dropdown span{
+    font-size: 14px;
+  }
+
+
+
+@media only screen and (min-width: 799px){
+  #test:hover .dropdown{
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+  }
+}
+
+
+@media only screen and (max-width: 799px) {
     .navig {
         flex-direction: column;
     }
@@ -107,6 +134,15 @@ header span {
     .navig__con{
       justify-content: flex-start;
       display: none;
+    }
+
+    .dropdown {
+      display: flex;
+    }
+
+    .nav_list > li{
+      background-color: darkslategrey;
+      border-bottom: 1px rgb(22, 22, 22) solid;
     }
 
     nav ul{
@@ -120,4 +156,14 @@ header span {
       display: block;
       background-color: goldenrod;
     }
+}
+
+/* article */
+
+.article {
+  background-color: rgb(88, 87, 87);
+  overflow: auto;
+  margin: 0 0 20px;
+  padding: 12px;
+  /* margin */
 }
