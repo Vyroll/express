@@ -1,0 +1,20 @@
+<h1>
+    edit article
+</h1>
+
+<form action="/articles/edit/{{article.id}}" method="post">
+    <div id="form-group">
+        <label><span>ID: </span>{{article.id}}</label><br><br>
+        <label>
+            Title 
+            <input type="text" name="title" value="{{article.title}}">
+        </label><br><br>
+        <label>
+            Content
+            <textarea name="content">{{article.content}}</textarea>
+        </label>
+        <br><button type="submit">submit</button>
+        <a href="/articles/edit/{{article.id}}" data-id="{{article.id}}">DELETE</a>
+
+    </div>
+</form>
