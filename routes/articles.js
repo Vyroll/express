@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const  path = require('path');
+const path = require('path');
 
 let Article = require(path.join(__dirname, '/../models/article'))
 
@@ -25,7 +25,6 @@ router.get('/add', function(req, res, next) {
 
 /* POST new */
 router.post('/add', function(req, res, next) {
-    // console.log('[kg] submitted');
     let article = new Article();
     article.title = req.body.title;
     article.content = req.body.content;
@@ -35,6 +34,7 @@ router.post('/add', function(req, res, next) {
             console.log(err);
             return;
         } else {
+            req.flash("inf", "artcile has been created");
             res.redirect("/articles/");
         }
     })
@@ -42,6 +42,7 @@ router.post('/add', function(req, res, next) {
 
 /* GET Edit. */
 router.get('/edit/:id', function(req, res, next) {
+    req.flash("info", "added post");
     Article.findById(req.params.id, (err, article)=>{
         if (err) {
             console.log('[kg:GET Edit] ' + err)
@@ -56,7 +57,6 @@ router.get('/edit/:id', function(req, res, next) {
 
 // POST edit
 router.post('/edit/:id', function(req, res, next) {
-    // console.log('[kg] submitted');
     let article = {};
     article.title = req.body.title;
     article.content = req.body.content;
@@ -68,6 +68,7 @@ router.post('/edit/:id', function(req, res, next) {
             console.log(err);
             return;
         } else {
+            req.flash("inf", "artcile has been eddited");
             res.redirect("/articles/");
         }
     })
@@ -81,6 +82,7 @@ router.delete('/:id', function(req, res, next) {
         if (err) {
             console.log('[kg] ' + err)
         } else {
+            req.flash("inf", "artcile has been deleted");
             res.send('[kg] succes');
         }
     })

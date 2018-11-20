@@ -9,6 +9,8 @@ let articleSchema = mongoose.Schema({
         type: String,
         require: true
     },
+},{
+    versionKey: false
 });
 
 let Article = module.exports = mongoose.model('Article', articleSchema);

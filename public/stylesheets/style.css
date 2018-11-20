@@ -17,13 +17,14 @@ p {
 .wrapper {
   max-width: 1012px;
   margin: 0 auto;
+  padding: 20px;
 }
 
 /* header */
 header {
   background-color: blueviolet;
   padding: 100px 0;
-  height: 10vw;
+  min-height: 10vw;
   text-align: center;
 }
 
@@ -115,49 +116,71 @@ header span {
     font-size: 14px;
   }
 
-
-
-@media only screen and (min-width: 799px){
-  #test:hover .dropdown{
-    position: absolute;
-    display: flex;
-    flex-direction: column;
-  }
-}
-
-
-@media only screen and (max-width: 799px) {
-    .navig {
-        flex-direction: column;
-    }
-
-    .navig__con{
-      justify-content: flex-start;
-      display: none;
-    }
-
-    .dropdown {
+  @media only screen and (min-width: 799px){
+    #test:hover .dropdown{
+      position: absolute;
       display: flex;
-    }
-
-    .nav_list > li{
-      background-color: darkslategrey;
-      border-bottom: 1px rgb(22, 22, 22) solid;
-    }
-
-    nav ul{
       flex-direction: column;
-      flex: 1;
     }
+  }
 
-    #expand{
-      float: left;
-      width: 23px;
-      display: block;
-      background-color: goldenrod;
-    }
-}
+  @media only screen and (max-width: 799px) {
+      .navig {
+          flex-direction: column;
+      }
 
+      .navig__con{
+        justify-content: flex-start;
+        display: none;
+      }
+
+      .dropdown {
+        display: flex;
+      }
+
+      .nav_list > li{
+        background-color: darkslategrey;
+        border-bottom: 1px rgb(22, 22, 22) solid;
+      }
+
+      nav ul{
+        flex-direction: column;
+        flex: 1;
+      }
+
+      #expand{
+        float: left;
+        width: 23px;
+        display: block;
+        background-color: goldenrod;
+      }
+  }
+  /* flash msg */
+  .messages ul {
+    padding: 0;
+    list-style-type: none;
+    font-size: 18px;
+    margin: 0;
+  }
+
+  .flash li{
+    background-color: pink;
+    padding: 3px 18px;
+    border-radius: 15px;
+    border: solid 1px rgb(34, 33, 33);
+    text-align: left;
+    margin: 0 0 10px;
+  }
+
+  .err li{
+    background-color: red;
+  }
+  .inf li{
+    background-color: blue;
+  }
+  .not li{
+    background-color: yellow;
+  }
 /* article */
 
 .article {

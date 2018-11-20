@@ -1,0 +1,31 @@
+{{#unless (empt messages)}}
+    <div class="messages wrapper">
+        {{#if messages.err}}
+            <div class="flash err">
+                <ul>
+                    {{#each messages.err as |err|}}
+                        <li>{{err}}</li>
+                    {{/each}}
+                </ul>
+            </div>
+        {{/if}}
+        {{#if messages.inf}}
+            <div class="flash inf">
+                <ul>
+                    {{#each messages.inf as |inf|}}
+                        <li>{{inf}}</li>
+                    {{/each}}
+                </ul>
+            </div>
+        {{/if}}
+        {{#if messages.not}}
+            <div class="flash not">
+                <ul>
+                    {{#each messages.not as |not|}}
+                        <li>{{not}}</li>
+                    {{/each}}
+                </ul>
+            </div>
+        {{/if}}
+    </div>
+{{/unless }}
