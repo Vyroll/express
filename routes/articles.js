@@ -1,7 +1,8 @@
 const express = require('express');
-const router = express.Router();
 const path = require('path');
+const { check, validationResult } = require('express-validator/check');
 
+const router = express.Router();
 let Article = require(path.join(__dirname, '/../models/article'))
 
 /* GET Index. */
@@ -22,22 +23,38 @@ router.get('/add', function(req, res, next) {
     res.render('articles/add');
 });
 
-
 /* POST new */
-router.post('/add', function(req, res, next) {
-    let article = new Article();
-    article.title = req.body.title;
-    article.content = req.body.content;
-
-    article.save((err)=>{
-        if (err) {
-            console.log(err);
-            return;
+router.post(
+    '/add',
+    [
+        check('title')
+        .not().isEmpty().withMessage('must be set')
+        .isLength({ min: 5 }).withMessage('must be at least 5 chars long'),
+        check('content')
+        .not().isEmpty().withMessage('must be set')
+        .isLength({ min: 5 }).withMessage('must be at least 5 chars long')
+    ],
+    (req, res, next) => {
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) {
+            errors.array().forEach((err) => {
+                req.flash("err", `${err.param}: ${err.msg}`);
+              });
+            res.redirect("/articles/add");
         } else {
-            req.flash("inf", "artcile has been created");
-            res.redirect("/articles/");
+            Article.create({
+                title: req.body.title,
+                content: req.body.content
+            }, (err, small) => {
+                if (err) {
+                    console.log(err);
+                    return;
+                } else {
+                    req.flash("inf", "artcile has been created");
+                    res.redirect("/articles/");
+                }
+            }).then(article => res.json(article));
         }
-    })
 });
 
 /* GET Edit. */
@@ -53,7 +70,6 @@ router.get('/edit/:id', function(req, res, next) {
         }
     })
 });
-
 
 // POST edit
 router.post('/edit/:id', function(req, res, next) {
