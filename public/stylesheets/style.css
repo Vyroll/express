@@ -117,7 +117,7 @@ header span {
   }
 
   @media only screen and (min-width: 799px){
-    #test:hover .dropdown{
+    .drop:hover .dropdown{
       position: absolute;
       display: flex;
       flex-direction: column;

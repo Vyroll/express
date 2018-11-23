@@ -12,7 +12,8 @@ router.get('/', function(req, res, next) {
             console.log('[kg] ' + err)
         } else {
             res.render('articles/index', {
-                articles
+                articles,
+                title: 'Artciles'
             });
         }
     })
@@ -20,7 +21,9 @@ router.get('/', function(req, res, next) {
 
 /* GET news post. */
 router.get('/add', function(req, res, next) {
-    res.render('articles/add');
+    res.render('articles/add',{
+        title: 'Create Article'
+    });
 });
 
 /* POST new */
@@ -65,7 +68,8 @@ router.get('/edit/:id', function(req, res, next) {
             console.log('[kg:GET Edit] ' + err)
         } else {
             res.render('articles/edit', {
-                article
+                article,
+                title: 'Edit Article'
             });
         }
     })
@@ -113,7 +117,8 @@ router.get('/:id', function(req, res, next) {
             console.log('[kg] ' + err)
         } else {
             res.render('articles/show', {
-                article
+                article,
+                title: 'Article'
             });
         }
     })

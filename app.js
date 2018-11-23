@@ -10,6 +10,13 @@ const flash = require('connect-flash');
 
 const app = express();
 
+//other
+app.use(logger('dev'));
+app.use(express.json());
+app.use(express.urlencoded({ extended: false }));
+app.use(cookieParser('secret'));
+app.use(express.static(path.join(__dirname, 'public')));
+
 //instant msg
   // session
   app.use(session({
@@ -31,37 +38,29 @@ const app = express();
   let db = mongoose.connection;
   //database check connection
   db.once('open', ()=>{
-    console.log('[kg] Connected to DB');
+    console.log('[kg: db] Connected to DB');
   });
-  ()=>console.log('awd');
   
   db.on('error', (err)=>{
-    console.log('[kg] ' + err);
+    console.log('[kg: db.err] ' + err);
   })
-  // import models
-  let Article = require('./models/article')
 
 //routing
-  const indexRouter = require('./routes/index');
-  const articlesRouter = require('./routes/articles');
-
-// view engine setup
+  // view engine setup
   // app.set('view options', { layout: 'other' });
   app.set('views', path.join(__dirname, 'views'));
   app.set('view engine', 'hbs');
+  hbs.registerPartials(__dirname + '/views/partials');
 
-hbs.registerPartials(__dirname + '/views/partials');
+  // import routers
+  const indexRouter = require('./routes/index');
+  const articlesRouter = require('./routes/articles');
+  const usersRouter = require('./routes/users');
 
-//other
-app.use(logger('dev'));
-app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
-app.use(cookieParser('secret'));
-app.use(express.static(path.join(__dirname, 'public')));
-
-
-app.use('/', indexRouter);
-app.use('/articles', articlesRouter);
+  // assign routers
+  app.use('/', indexRouter);
+  app.use('/articles', articlesRouter);
+  app.use('/users', usersRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
@@ -76,7 +75,9 @@ app.use(function(err, req, res, next) {
 
   // render the error page
   res.status(err.status || 500);
-  res.render('error');
+  res.render('error', {
+    title: "ERROR"
+  });
 });
 
 hbs.registerHelper('empt', function(obj){
