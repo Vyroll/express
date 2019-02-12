@@ -1,6 +1,7 @@
 const express = require('express');
 const path = require('path');
 const bcrypt = require('bcryptjs');
+const passport = require('passport')
 
 const { check, validationResult } = require('express-validator/check');
 
@@ -59,6 +60,27 @@ router.post(
                 }
             });
         }
+});
+
+/* GET login form */
+router.get('/login', function(req, res, next) {
+    res.render('users/login', {title:"Login"});
+});
+
+/* POST login */
+router.post('/login', function(req, res, next) {
+    passport.authenticate('local', { 
+        successRedirect: '/',
+        failureRedirect: '/users/login',
+        failureFlash: true,
+        successFlash: 'Welcome!'
+    })(req, res, next);
+});
+
+router.get('/logout', function(req, res, next) {
+    req.logout();
+    req.flash('not','You have been logged out');
+    res.redirect('/users/login');
 });
 
 module.exports = router;

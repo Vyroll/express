@@ -4,6 +4,7 @@ const { check, validationResult } = require('express-validator/check');
 
 const router = express.Router();
 let Article = require(path.join(__dirname, '/../models/article'))
+let User = require(path.join(__dirname, '/../models/user'))
 
 /* GET Index. */
 router.get('/', function(req, res, next) {
@@ -20,7 +21,7 @@ router.get('/', function(req, res, next) {
 });
 
 /* GET news post. */
-router.get('/add', function(req, res, next) {
+router.get('/add', logedIn, function(req, res, next) {
     res.render('articles/add',{
         title: 'Create Article'
     });
@@ -35,7 +36,7 @@ router.post(
         .isLength({ min: 5 }).withMessage('must be at least 5 chars long'),
         check('content')
         .not().isEmpty().withMessage('must be set')
-        .isLength({ min: 5 }).withMessage('must be at least 5 chars long')
+        .isLength({ min: 5 }).withMessage('must be at least 5 chars long'),
     ],
     (req, res, next) => {
         const errors = validationResult(req);
@@ -47,7 +48,8 @@ router.post(
         } else {
             Article.create({
                 title: req.body.title,
-                content: req.body.content
+                content: req.body.content,
+                author: req.user._id
             }, (err, small) => {
                 if (err) {
                     console.log(err);
@@ -61,11 +63,14 @@ router.post(
 });
 
 /* GET Edit. */
-router.get('/edit/:id', function(req, res, next) {
-    req.flash("info", "added post");
+router.get('/edit/:id', logedIn, function(req, res, next) {
     Article.findById(req.params.id, (err, article)=>{
         if (err) {
             console.log('[kg:GET Edit] ' + err)
+        } else if(article.author !== req.user._id) {
+            console.log("asd");
+            req.flash("err", "u need to own this");
+            res.redirect("/");
         } else {
             res.render('articles/edit', {
                 article,
@@ -94,16 +99,26 @@ router.post('/edit/:id', function(req, res, next) {
     })
 });
 
+// DELETE article
 router.delete('/:id', function(req, res, next) {
 
+    if(!req.user._id) {
+        res.status(500).send();
+    }
     let query = {_id:req.params.id}
 
-    Article.remove(query, (err)=>{
-        if (err) {
-            console.log('[kg] ' + err)
+    Article.findById(req.params.id, (err, article)=>{
+        if(article.author !== req.user._id) {
+            res.status(500).send();
         } else {
-            req.flash("inf", "artcile has been deleted");
-            res.send('[kg] succes');
+            Article.remove(query, (err)=>{
+                if (err) {
+                    console.log('[kg] ' + err)
+                } else {
+                    req.flash("inf", "artcile has been deleted");
+                    res.send('[kg] succes');
+                }
+            })
         }
     })
 });
@@ -113,15 +128,26 @@ router.delete('/:id', function(req, res, next) {
 // TODO: order matters because /:id i always matched 
 router.get('/:id', function(req, res, next) {
     Article.findById(req.params.id, (err, article)=>{
-        if (err) {
-            console.log('[kg] ' + err)
-        } else {
-            res.render('articles/show', {
-                article,
-                title: 'Article'
-            });
-        }
+        User.findById(article.author,(err, user)=>{
+            if (err) {
+                console.log('[kg] ' + err)
+            } else {
+                res.render('articles/show', {
+                    article,
+                    author:user.username,
+                    title: 'Article'
+                });
+            }
+        })
     })
 });
 
+function logedIn(req, res, next) {
+    if (req.isAuthenticated()) {
+        return next();
+    } else {
+        req.flash('err', 'U need to be loged in');
+        res.redirect('/users/login')
+    }
+}
 module.exports = router;

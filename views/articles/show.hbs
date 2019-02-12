@@ -1,6 +1,13 @@
 <p>
-    <span>ID: </span>{{article.id}}<br>
+    <span>article ID: </span>{{article.id}}<br>
+    <span>author: </span>{{author}}<br>
+
     <span>Title: </span>{{article.title}}<br>
     <span>Content: </span>{{article.content}}<br>
-    <a href="/articles/edit/{{article.id}}">Edit</a>
+    {{#if user}}
+        {{#if (owns user.id article.author)}}
+            <a href="/articles/edit/{{article.id}}">Edit</a>
+            <a href="/articles/edit/{{article.id}}" data-id="{{article.id}}">DELETE</a>
+        {{/if}}
+    {{/if}}
 </p>

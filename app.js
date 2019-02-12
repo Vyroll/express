@@ -7,15 +7,17 @@ const hbs = require('hbs');
 const mongoose = require('mongoose');
 const session = require('express-session');
 const flash = require('connect-flash');
+const conf_db = require('./config/database');
+const passport = require('passport')
 
 const app = express();
 
 //other
-app.use(logger('dev'));
-app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
-app.use(cookieParser('secret'));
-app.use(express.static(path.join(__dirname, 'public')));
+  app.use(logger('dev'));
+  app.use(express.json());
+  app.use(express.urlencoded({ extended: false }));
+  app.use(cookieParser('secret'));
+  app.use(express.static(path.join(__dirname, 'public')));
 
 //instant msg
   // session
@@ -33,8 +35,31 @@ app.use(express.static(path.join(__dirname, 'public')));
     next();
   });
 
+// user
+  require('./config/passport')(passport);
+  app.use(passport.initialize());
+  app.use(passport.session());
+  // global access
+  app.use((req, res, next)=>{
+    res.locals.logedIn = req.isAuthenticated();
+    next();
+  });
+  app.use((req, res, next)=>{
+    res.locals.user = req.user || null
+    next();
+  });
+
+  // app.use((req, res, next)=>{
+  //   if (req.user) {
+  //     res.locals.owns = req.user._id
+  //   } else {
+  //     res.locals.owns = null
+  //   }
+  //   next();
+  // });
+
 //database connection
-  mongoose.connect('mongodb://localhost/db_cont', { useNewUrlParser: true });
+  mongoose.connect(conf_db.database, { useNewUrlParser: true });
   let db = mongoose.connection;
   //database check connection
   db.once('open', ()=>{
@@ -63,31 +88,44 @@ app.use(express.static(path.join(__dirname, 'public')));
   app.use('/users', usersRouter);
 
 // catch 404 and forward to error handler
-app.use(function(req, res, next) {
-  next(createError(404));
-});
+  app.use(function(req, res, next) {
+    next(createError(404));
+  });
 
 // error handler
-app.use(function(err, req, res, next) {
-  // set locals, only providing error in development
-  res.locals.message = err.message;
-  res.locals.error = req.app.get('env') === 'development' ? err : {};
+  app.use(function(err, req, res, next) {
+    // set locals, only providing error in development
+    res.locals.message = err.message;
+    res.locals.error = req.app.get('env') === 'development' ? err : {};
 
-  // render the error page
-  res.status(err.status || 500);
-  res.render('error', {
-    title: "ERROR"
+    // render the error page
+    res.status(err.status || 500);
+    res.render('error', {
+      title: "ERROR"
+    });
   });
-});
 
-hbs.registerHelper('empt', function(obj){
-  let empty = true;
-  Object.entries(obj).forEach(([key, value]) => {
-    if (value.length > 0) {
-      empty = false;
+// handlebars helpers
+  hbs.registerHelper('empt', function(obj){
+    let empty = true;
+    Object.entries(obj).forEach(([key, value]) => {
+      if (value.length > 0) {
+        empty = false;
+      }
+    });
+    return empty;
+  })
+
+  hbs.registerHelper('json', function(obj) {
+    return JSON.stringify(obj);
+  });
+
+  hbs.registerHelper('owns', function(author, user) {
+    if (author === user) {
+      return true;
+    } else {
+      return false;
     }
   });
-  return empty;
-})
 
 module.exports = app;

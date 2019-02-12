@@ -1,4 +1,4 @@
-const  mongoose = require('mongoose');
+const mongoose = require('mongoose');
 
 let articleSchema = mongoose.Schema({
     title:{
@@ -6,6 +6,10 @@ let articleSchema = mongoose.Schema({
         require: true
     },
     content:{
+        type: String,
+        require: true
+    },
+    author:{
         type: String,
         require: true
     },
