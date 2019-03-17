@@ -43,7 +43,7 @@ router.post(
         if (!errors.isEmpty()) {
             errors.array().forEach((err) => {
                 req.flash("err", `${err.param}: ${err.msg}`);
-              });
+            });
             res.redirect("/articles/add");
         } else {
             Article.create({
@@ -67,7 +67,7 @@ router.get('/edit/:id', logedIn, function(req, res, next) {
     Article.findById(req.params.id, (err, article)=>{
         if (err) {
             console.log('[kg:GET Edit] ' + err)
-        } else if(article.author !== req.user._id) {
+        } else if(article.author != req.user._id) {
             console.log("asd");
             req.flash("err", "u need to own this");
             res.redirect("/");
@@ -108,7 +108,7 @@ router.delete('/:id', function(req, res, next) {
     let query = {_id:req.params.id}
 
     Article.findById(req.params.id, (err, article)=>{
-        if(article.author !== req.user._id) {
+        if(article.author != req.user._id) {
             res.status(500).send();
         } else {
             Article.remove(query, (err)=>{
